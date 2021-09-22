@@ -77,7 +77,7 @@ public class WordCount {
 
             // loop para criar (chave, valor) com (palavra, 1)
             for (String p : palavras) {
-                if (p.equals("  ")) continue;
+                if (p.equals("  ") || p.equals("")) continue;
                 // (p, 1) -> chaveSaida, valorSaida
                 Text chaveSaida = new Text(p);
                 IntWritable valorSaida = new IntWritable(1);
