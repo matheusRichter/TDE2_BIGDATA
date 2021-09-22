@@ -65,15 +65,15 @@ public class Exercicio4 {
 
 
             if(NumberUtils.isParsable(colunas[5])) {
-                //obtendo o preco
+                //obtendo o preço
                 double preco = Double.parseDouble(colunas[5]);
 
-                //ocorrencia
+                //ocorrência
                 long n = 1;
 
                 Text year = new Text(colunas[1]);
 
-                //passando temperatura e ocorrencia pro sort/shuffle
+                //passando preço e ocorrência para o sort/shuffle
                 con.write(year, new CustomValueWritable(n, preco));
             }
 
@@ -85,9 +85,9 @@ public class Exercicio4 {
                 throws IOException, InterruptedException {
 
             // Chega no reduce, uma chave UNICA com uma lista de valres compostos
-            // por ocorrencia e soma dos precos
+            // por ocorrência e soma dos preços
 
-            //comando precos e ocorrencias
+            //somando preços e ocorrências
             double somapreco = 0.0;
             long somaNs = 0;
 

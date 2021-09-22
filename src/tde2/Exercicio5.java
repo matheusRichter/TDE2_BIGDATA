@@ -72,12 +72,14 @@ public class Exercicio5 {
 
                 //valor
                 double trade_usd = Double.parseDouble(colunas[5]);
+                double quantity = Double.parseDouble(0 + colunas[8]);
+                double avgprice = trade_usd/quantity;
 
-                //ocorrencia
+                //ocorrência
                 long n = 1;
 
                 //passando temperatura e ocorrencia pro sort/shuffle
-                con.write(new ChaveTripla(year, category, quantity_name), new CustomValueWritable(n, trade_usd));
+                con.write(new ChaveTripla(year, category, quantity_name), new CustomValueWritable(n, avgprice));
             }
         }
     }

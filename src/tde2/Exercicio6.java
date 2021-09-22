@@ -50,17 +50,6 @@ public class Exercicio6 {
 
     }
 
-
-    /**
-     * Parametro (Tipo) 1: Tipo da chave de entrada
-     * Parametro 2: Tipo do valor da entrada
-     * Parametro 3: Tipo da chave de saida
-     * Parametro 4: Tipo do valor de saida
-     *
-     * ARQUIVO TEXTO DE ENTRADA
-     * - Input: (offset, conteudo da linha)
-     *
-     */
     public static class MapForExe6 extends Mapper<LongWritable, Text, ChaveComposta, DoubleWritable> {
 
         public void map(LongWritable key, Text value, Context con)
@@ -72,9 +61,9 @@ public class Exercicio6 {
             String[] colunas = linha.split(";");
 
             if(NumberUtils.isParsable(colunas[5])) {
-                double price = Double.parseDouble(colunas[5]);
-                String unitType = colunas[7];
-                String year = colunas[1];
+                double price = Double.parseDouble(colunas[5]); // armazenado preço
+                String unitType = colunas[7]; // armazenando unidade da commodity
+                String year = colunas[1]; // armazenando o ano da linha
 
                 ChaveComposta chaveSaida = new ChaveComposta(unitType, year);
                 con.write(chaveSaida, new DoubleWritable(price));
@@ -82,27 +71,22 @@ public class Exercicio6 {
         }
     }
 
-    /**
-     * 1º tipo: tipo da chave de entrade (igual a chave de saida do map)
-     * 2º tipo: tipo do valor de entrada (igual ao valor de saida do map)
-     * 3º tipo: tipo da chave de saida
-     * 4º tipo: tipo do valor de saida
-     */
-
     public static class ReduceForExe6 extends Reducer<ChaveComposta, DoubleWritable, Text, DoubleWritable> {
 
         public void reduce(ChaveComposta key, Iterable<DoubleWritable> values, Context con)
                 throws IOException, InterruptedException {
 
+            // variável para pegar o maior valor
             DoubleWritable maior = new DoubleWritable(0);
+
             for(DoubleWritable o : values){
+                // verifica se o valor atual é maior que o já armazenado
                 if(o.compareTo(maior) > 0){
                     maior = o;
                 }
             }
 
             Text keyText = new Text(key.toString());
-
             con.write(keyText,maior);
         }
     }

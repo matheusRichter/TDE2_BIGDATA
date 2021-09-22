@@ -49,17 +49,6 @@ public class Exercicio3 {
 
     }
 
-
-    /**
-     * Parametro (Tipo) 1: Tipo da chave de entrada
-     * Parametro 2: Tipo do valor da entrada
-     * Parametro 3: Tipo da chave de saida
-     * Parametro 4: Tipo do valor de saida
-     *
-     * ARQUIVO TEXTO DE ENTRADA
-     * - Input: (offset, conteudo da linha)
-     *
-     */
     public static class MapForExe3 extends Mapper<LongWritable, Text, Text, ChaveComposta> {
 
         public void map(LongWritable key, Text value, Context con)
@@ -67,41 +56,37 @@ public class Exercicio3 {
             // obtendo conteudo da linha
             String linha = value.toString();
 
+            // separando as colunas
             String[] colunas = linha.split(";");
 
-            String year = colunas[1];
+            String year = colunas[1]; // armazena o ano da linha em questão
+            String quantidade = colunas[8]; // armazena a quantidade da linha em questão
+            String codigo = colunas[2]; // armazena o código da commodity da linha em questão
 
             if(year.equals("2016")) {
-                if(NumberUtils.isParsable(colunas[8])) {
-                    Text flow = new Text(colunas[4]);
+                if(NumberUtils.isParsable(quantidade)) {
+                    Text flow = new Text(colunas[4]); // armazena o tipo do fluxo
 
-                    ChaveComposta valorSaida = new ChaveComposta(colunas[8], colunas[2]);
+                    ChaveComposta valorSaida = new ChaveComposta(quantidade, codigo);
                     con.write(flow, valorSaida);
                 }
             }
         }
     }
 
-    /**
-     * 1º tipo: tipo da chave de entrade (igual a chave de saida do map)
-     * 2º tipo: tipo do valor de entrada (igual ao valor de saida do map)
-     * 3º tipo: tipo da chave de saida
-     * 4º tipo: tipo do valor de saida
-     */
-
     public static class ReduceForExe3 extends Reducer<Text, ChaveComposta, Text, ChaveComposta> {
 
         public void reduce(Text key, Iterable<ChaveComposta> values, Context con)
                 throws IOException, InterruptedException {
 
-            //somando todos os valores de ocorrencia para uma palavra especifica
-            DoubleWritable maior = new DoubleWritable(0);
-            String code = "";
+            DoubleWritable maior = new DoubleWritable(0); // maior quantidade
+            String code = ""; // código da commodity
             for(ChaveComposta o : values){
+                // recupera o valor da quantidade que veio do Map
                 DoubleWritable q = new DoubleWritable(Double.parseDouble(o.getKey1()));
                 if(q.compareTo(maior) > 0){
                     maior = q;
-                    code = o.getKey2();
+                    code = o.getKey2(); // recupera o código da commodity que veio do Map
                 }
             }
 
